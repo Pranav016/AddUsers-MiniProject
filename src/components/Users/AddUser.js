@@ -15,7 +15,13 @@ const AddUser = (props) => {
 			// forcing conversion of enteredAge to number
 			return;
 		}
-		console.log(enteredUsername, enteredAge);
+		const user = {
+			id: Math.random().toString(),
+			name: enteredUsername,
+			age: enteredAge,
+		};
+		console.log(user);
+		props.newUser(user);
 		setEnteredUsername('');
 		setEnteredAge('');
 	};
