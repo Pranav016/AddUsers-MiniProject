@@ -10,7 +10,7 @@
 	"plugins": ["react", "prettier"],
 	"rules": {
 		"prettier/prettier": [
-			2,
+			1,
 			{
 				"singleQuote": true,
 				"trailingComma": "es5",
