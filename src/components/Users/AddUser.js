@@ -1,24 +1,31 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useRef } from 'react';
 import classes from './AddUser.module.css';
 import Card from '../UI/Card';
 import Button from '../UI/Button';
 import ErrorModal from '../UI/ErrorModal';
 
 const AddUser = (props) => {
-	const [enteredUsername, setEnteredUsername] = useState('');
-	const [enteredAge, setEnteredAge] = useState('');
+	// const [enteredName, setEnteredName] = useState('');
+	// const [enteredAge, setEnteredAge] = useState('');
 	const [error, setError] = useState();
+	const nameInputRef = useRef();
+	const ageInputRef = useRef();
 
 	const addUserHandler = (event) => {
 		event.preventDefault();
-		if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
+		const enteredUserName = nameInputRef.current.value;
+		const enteredUserAge = ageInputRef.current.value;
+		if (
+			enteredUserName.trim().length === 0 ||
+			enteredUserAge.trim().length === 0
+		) {
 			setError({
 				title: 'Invalid Input',
 				message: 'Please enter a valid name and age. (non-empty values)',
 			});
 			return;
 		}
-		if (+enteredAge < 1) {
+		if (+enteredUserAge < 1) {
 			// forcing conversion of enteredAge to number
 			setError({
 				title: 'Invalid Age',
@@ -28,21 +35,29 @@ const AddUser = (props) => {
 		}
 		const user = {
 			id: Math.random().toString(),
-			name: enteredUsername,
-			age: enteredAge,
+			name: enteredUserName,
+			age: enteredUserAge,
 		};
-		console.log(user);
+		// const user = {
+		// 	id: Math.random().toString(),
+		// 	name: enteredName,
+		// 	age: enteredAge,
+		// };
 		props.newUser(user);
-		setEnteredUsername('');
-		setEnteredAge('');
+		// setEnteredName('');
+		// setEnteredAge('');
+
+		// not a good practice but for demo purpose
+		nameInputRef.current.value = '';
+		ageInputRef.current.value = '';
 	};
 
-	const usernameChangeHandler = (event) => {
-		setEnteredUsername(event.target.value);
-	};
-	const ageChangeHandler = (event) => {
-		setEnteredAge(event.target.value);
-	};
+	// const usernameChangeHandler = (event) => {
+	// 	setEnteredName(event.target.value);
+	// };
+	// const ageChangeHandler = (event) => {
+	// 	setEnteredAge(event.target.value);
+	// };
 	const errorHandler = () => {
 		setError(null);
 	};
@@ -61,16 +76,18 @@ const AddUser = (props) => {
 					<input
 						id='username'
 						type='text'
-						onChange={usernameChangeHandler}
-						value={enteredUsername}></input>
-					{/* two way binding */}
+						// onChange={usernameChangeHandler}
+						// value={enteredName}
+						ref={nameInputRef}></input>
+					{/* two way binding when we use useState hooks (also controlled components), these become uncontrolled components when we use useRef hooks to access their value */}
 					<label htmlFor='age'>Age (Years)</label>
 					<input
 						id='age'
 						type='number'
-						onChange={ageChangeHandler}
-						value={enteredAge}></input>
-					{/* two way binding */}
+						// onChange={ageChangeHandler}
+						// value={enteredAge}
+						ref={ageInputRef}></input>
+					{/* two way binding when we use useState hooks (also controlled components), these become uncontrolled components when we use useRef hooks to access their value */}
 					<Button type='submit'>Submit</Button>
 				</form>
 			</Card>
